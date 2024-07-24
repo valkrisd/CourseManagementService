@@ -1,6 +1,6 @@
 package com.niiazov.coursemanagement.dto;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
@@ -8,15 +8,11 @@ import lombok.Data;
 public class LessonDTO {
 
     @Size(max = 255, message = "Title cannot be longer than 255 characters")
-    @NotNull
+    @NotEmpty(message = "Title cannot be empty")
     private String title;
 
     private String description;
 
     private Integer orderIndex;
-
-    // TODO: find out how it should be implemented
-    private String materials;
-
 
 }

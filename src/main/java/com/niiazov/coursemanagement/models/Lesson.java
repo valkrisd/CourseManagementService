@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "lesson")
@@ -28,10 +30,6 @@ public class Lesson {
     @Column(name = "order_index")
     private Integer orderIndex;
 
-    // TODO: find out how it should be implemented
-    @Column(name = "materials")
-    private String materials;
-
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
@@ -41,4 +39,7 @@ public class Lesson {
     @ManyToOne
     @JoinColumn(name = "course_id")
     private Course course;
+
+    @OneToMany(mappedBy = "lesson")
+    private Set<LessonMaterial> lessonMaterials = new HashSet<>();
 }

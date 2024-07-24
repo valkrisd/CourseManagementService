@@ -1,5 +1,6 @@
 package com.niiazov.coursemanagement.models;
 
+import com.niiazov.coursemanagement.enums.EnrollmentStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,10 @@ public class Enrollment {
 
     @Column(name = "enrollment_date")
     private LocalDate enrollmentDate;
+
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private EnrollmentStatus status;
 
     @Column(name = "completed")
     private Boolean completed;

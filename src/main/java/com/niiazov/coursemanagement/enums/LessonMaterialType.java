@@ -1,5 +1,5 @@
 package com.niiazov.coursemanagement.enums;
 
-public enum Type {
+public enum LessonMaterialType {
     VIDEO, TEXT, TASK
 }

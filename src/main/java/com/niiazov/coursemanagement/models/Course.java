@@ -1,6 +1,6 @@
 package com.niiazov.coursemanagement.models;
 
-import com.niiazov.coursemanagement.enums.Status;
+import com.niiazov.coursemanagement.enums.CourseStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +38,7 @@ public class Course {
 
     @Column(name = "status", length = 20)
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private CourseStatus courseStatus;
 
     @Column(name = "price")
     private BigDecimal price;
@@ -54,9 +54,6 @@ public class Course {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
-
-    @OneToMany(mappedBy = "course")
-    private Set<CourseMaterial> courseMaterials = new HashSet<>();
 
     @OneToMany(mappedBy = "course")
     private Set<Lesson> lessons = new HashSet<>();

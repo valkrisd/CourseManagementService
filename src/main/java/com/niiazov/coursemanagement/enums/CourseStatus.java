@@ -1,5 +1,5 @@
 package com.niiazov.coursemanagement.enums;
 
-public enum Status {
+public enum CourseStatus {
     ACTIVE, ARCHIVED, PENDING
 }

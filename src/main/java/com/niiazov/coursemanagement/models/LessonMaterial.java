@@ -1,6 +1,6 @@
 package com.niiazov.coursemanagement.models;
 
-import com.niiazov.coursemanagement.enums.Type;
+import com.niiazov.coursemanagement.enums.LessonMaterialType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -9,11 +9,11 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "course_material")
+@Table(name = "lesson_material")
 @RequiredArgsConstructor
 @Getter
 @Setter
-public class CourseMaterial {
+public class LessonMaterial {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +22,7 @@ public class CourseMaterial {
 
     @Column(name = "type", nullable = false, length = 50)
     @Enumerated(EnumType.STRING)
-    private Type type;
+    private LessonMaterialType lessonMaterialType;
 
     @Column(name = "title")
     private String title;
@@ -40,6 +40,6 @@ public class CourseMaterial {
     private LocalDateTime updatedAt;
 
     @ManyToOne
-    @JoinColumn(name = "course_id")
-    private Course course;
+    @JoinColumn(name = "lesson_id")
+    private Lesson lesson;
 }

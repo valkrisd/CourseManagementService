@@ -1,6 +1,6 @@
 package com.niiazov.coursemanagement.dto;
 
-import com.niiazov.coursemanagement.enums.Status;
+import com.niiazov.coursemanagement.enums.CourseStatus;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @Data
 public class CourseDTO {
     @Size(max = 255, message = "Title cannot be longer than 255 characters")
-    @NotNull
+    @NotEmpty(message = "Title cannot be empty")
     private String title;
 
     private String description;
@@ -20,7 +20,8 @@ public class CourseDTO {
 
     private Integer duration;
 
-    private Status status;
+    @Size(max = 20, message = "Status cannot be longer than 20 characters")
+    private CourseStatus courseStatus;
 
     @Digits(integer = 10, fraction = 2, message = "Price must be a number of up to 10 integer digits with 2 fractional digits")
     private BigDecimal price;
