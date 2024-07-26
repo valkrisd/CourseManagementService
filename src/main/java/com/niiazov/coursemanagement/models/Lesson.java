@@ -46,6 +46,6 @@ public class Lesson {
     @JoinColumn(name = "course_id")
     private Course course;
 
-    @OneToMany(mappedBy = "lesson", cascade = {CascadeType.ALL, CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+    @OneToMany(mappedBy = "lesson", cascade = {CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     private Set<LessonMaterial> lessonMaterials = new HashSet<>();
 }
