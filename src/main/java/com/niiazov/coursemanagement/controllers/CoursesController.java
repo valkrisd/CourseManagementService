@@ -36,7 +36,7 @@ public class CoursesController {
         coursesService.createCourse(courseDTO);
         log.info("Курс успешно создан: {}", courseDTO);
 
-        return ResponseEntity.ok(HttpStatus.OK);
+        return ResponseEntity.ok(HttpStatus.CREATED);
     }
 
     @GetMapping
@@ -55,7 +55,6 @@ public class CoursesController {
         log.info("Курс с id: {} успешно найден", courseId);
 
         return ResponseEntity.ok(userDTO);
-
     }
 
     @PutMapping("/{courseId}")

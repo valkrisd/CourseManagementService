@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -26,7 +25,6 @@ public class CoursesService {
     public void createCourse(CourseDTO courseDTO) {
 
         Course course = courseMapper.toEntity(courseDTO);
-
         courseRepository.save(course);
     }
 
@@ -42,7 +40,7 @@ public class CoursesService {
 
         if (course.isPresent()) {
             return courseMapper.toDTO(course.get());
-        } else throw new ResourceNotFoundException("Course with id " + course + " not found");
+        } else throw new ResourceNotFoundException("Course with id " + courseId + " not found");
     }
 
     public Course getCourse(Integer courseId) {
@@ -50,7 +48,7 @@ public class CoursesService {
         Optional<Course> course = courseRepository.findById(courseId);
 
         if (course.isPresent()) return course.get();
-        else throw new ResourceNotFoundException("Course with id " + course + " not found");
+        else throw new ResourceNotFoundException("Course with id " + courseId + " not found");
     }
 
     @Transactional
@@ -68,7 +66,6 @@ public class CoursesService {
         courseToUpdate.setPrice(course.getPrice());
         courseToUpdate.setStartDate(course.getStartDate());
         courseToUpdate.setEndDate(course.getEndDate());
-        courseToUpdate.setUpdatedAt(LocalDateTime.now());
 
         courseRepository.save(courseToUpdate);
     }
@@ -77,7 +74,6 @@ public class CoursesService {
     public void deleteCourse(Integer courseId) {
 
         Course courseToDelete = getCourse(courseId);
-
         courseRepository.delete(courseToDelete);
     }
 }

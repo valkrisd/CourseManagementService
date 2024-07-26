@@ -7,7 +7,6 @@ import lombok.Data;
 @Data
 public class LessonMaterialDTO {
 
-    @Size(max = 50, message = "Type cannot be longer than 50 characters")
     private LessonMaterialType lessonMaterialType;
 
     @Size(max = 255, message = "Title cannot be longer than 255 characters")

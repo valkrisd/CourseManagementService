@@ -22,8 +22,9 @@ import java.util.Set;
 public class EnrollmentsController {
     private final EnrollmentsService enrollmentsService;
 
-    @PostMapping
-    public ResponseEntity<HttpStatus> createEnrollment(@RequestBody @Valid EnrollmentDTO enrollmentDTO,
+    @PostMapping("/course/{courseId}")
+    public ResponseEntity<HttpStatus> createEnrollment(@PathVariable Integer courseId,
+                                                       @RequestBody @Valid EnrollmentDTO enrollmentDTO,
                                                        BindingResult bindingResult) {
 
         log.info("Попытка создания новой записи на курс: {}", enrollmentDTO);
@@ -33,7 +34,7 @@ public class EnrollmentsController {
             throw new ResourceNotCreatedException(errorMsg);
         }
 
-        enrollmentsService.createEnrollment(enrollmentDTO);
+        enrollmentsService.createEnrollment(courseId, enrollmentDTO);
         log.info("Запись на курс успешно создана: {}", enrollmentDTO);
 
         return ResponseEntity.ok(HttpStatus.CREATED);

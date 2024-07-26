@@ -31,8 +31,6 @@ public class LessonMaterialsService {
         LessonMaterial lessonMaterial = lessonMaterialMapper.toEntity(lessonMaterialDTO);
 
         lesson.getLessonMaterials().add(lessonMaterial);
-        lesson.setUpdatedAt(LocalDateTime.now());
-
         lessonMaterial.setLesson(lesson);
 
         lessonMaterialRepository.save(lessonMaterial);

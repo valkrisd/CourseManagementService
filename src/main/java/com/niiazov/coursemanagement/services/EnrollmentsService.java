@@ -10,8 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -23,13 +21,13 @@ public class EnrollmentsService {
 
     private final EnrollmentRepository enrollmentRepository;
 
-    public void createEnrollment(EnrollmentDTO enrollmentDTO) {
-        Course courseToUpdate = coursesService.getCourse(enrollmentDTO.getUserId());
+    @Transactional
+    public void createEnrollment(Integer courseId, EnrollmentDTO enrollmentDTO) {
+        Course courseToUpdate = coursesService.getCourse(courseId);
         Enrollment enrollment = enrollmentMapper.toEntity(enrollmentDTO);
-        enrollment.setCourse(courseToUpdate);
 
+        enrollment.setCourse(courseToUpdate);
         courseToUpdate.getEnrollments().add(enrollment);
-        courseToUpdate.setUpdatedAt(LocalDateTime.now());
 
         enrollmentRepository.save(enrollment);
     }
@@ -41,10 +39,7 @@ public class EnrollmentsService {
         }
 
         Set<Enrollment> enrollments = enrollmentRepository.getEnrollmentsByUserId(userId);
-
-        if (enrollments.isEmpty()) {
-            throw new ResourceNotFoundException("User with id " + userId + " has no enrollments");
-        } else return enrollments.stream().map(enrollmentMapper::toDTO).collect(Collectors.toSet());
+        return enrollments.stream().map(enrollmentMapper::toDTO).collect(Collectors.toSet());
     }
 
     public Set<EnrollmentDTO> getEnrollmentsByCourseId(Integer courseId) {
@@ -54,42 +49,25 @@ public class EnrollmentsService {
         }
 
         Set<Enrollment> enrollments = enrollmentRepository.getEnrollmentsByCourseId(courseId);
-
-        if (enrollments.isEmpty()) {
-            throw new ResourceNotFoundException("There are no enrollments for course with id " + courseId);
-        } else return enrollments.stream().map(enrollmentMapper::toDTO).collect(Collectors.toSet());
+        return enrollments.stream().map(enrollmentMapper::toDTO).collect(Collectors.toSet());
     }
 
     @Transactional
-    public void updateEnrollment(Integer enrollmentId,
-                                 EnrollmentDTO enrollmentDTO) {
+    public void updateEnrollment(Integer enrollmentId, EnrollmentDTO enrollmentDTO) {
+        enrollmentRepository.findById(enrollmentId).map(existingEnrollment -> {
+            existingEnrollment.setStatus(enrollmentDTO.getStatus());
+            existingEnrollment.setCompleted(enrollmentDTO.getCompleted());
+            existingEnrollment.setEnrollmentDate(enrollmentDTO.getEnrollmentDate());
 
-        Optional<Enrollment> optionalEnrollment = enrollmentRepository.findById(enrollmentId);
-
-        if (optionalEnrollment.isEmpty()) {
-            throw new ResourceNotFoundException("Enrollment with id " + enrollmentId + " does not exist");
-        }
-
-        Enrollment enrollmentToUpdate = optionalEnrollment.get();
-
-        enrollmentToUpdate.setStatus(enrollmentDTO.getStatus());
-        enrollmentToUpdate.setCompleted(enrollmentDTO.getCompleted());
-        enrollmentToUpdate.setEnrollmentDate(enrollmentDTO.getEnrollmentDate());
-        enrollmentToUpdate.setUpdatedAt(LocalDateTime.now());
-
-        enrollmentRepository.save(enrollmentToUpdate);
+            return enrollmentRepository.save(existingEnrollment);
+        }).orElseThrow(() -> new ResourceNotFoundException("Enrollment with id " + enrollmentId + " does not exist"));
     }
 
     @Transactional
     public void deleteEnrollment(Integer enrollmentId) {
-
-        Optional<Enrollment> optionalEnrollment = enrollmentRepository.findById(enrollmentId);
-
-        if (optionalEnrollment.isEmpty()) {
-            throw new ResourceNotFoundException("Enrollment with id " + enrollmentId + " does not exist");
-        }
-
-        Enrollment enrollmentToDelete = optionalEnrollment.get();
+        Enrollment enrollmentToDelete = enrollmentRepository.findById(enrollmentId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Enrollment with id " + enrollmentId + " does not exist"));
         enrollmentRepository.delete(enrollmentToDelete);
     }
 }
