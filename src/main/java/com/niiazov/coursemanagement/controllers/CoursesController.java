@@ -43,7 +43,7 @@ public class CoursesController {
     public ResponseEntity<Set<CourseDTO>> getCourses() {
         log.info("Запрос списка всех курсов");
         Set<CourseDTO> courseDTOs = coursesService.getAllCourses();
-        log.debug("Список всех курсов успешно получен");
+        log.debug("Список всех курсов успешно получен: {}", courseDTOs);
 
         return ResponseEntity.ok(courseDTOs);
     }

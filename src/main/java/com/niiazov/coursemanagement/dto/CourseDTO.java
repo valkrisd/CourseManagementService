@@ -1,6 +1,7 @@
 package com.niiazov.coursemanagement.dto;
 
 import com.niiazov.coursemanagement.enums.CourseStatus;
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
@@ -11,6 +12,8 @@ import java.time.LocalDate;
 
 @Data
 public class CourseDTO {
+    @Nullable
+    private Integer id;
 
     @Size(max = 255, message = "Title cannot be longer than 255 characters")
     @NotEmpty(message = "Title cannot be empty")

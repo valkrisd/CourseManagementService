@@ -22,8 +22,8 @@ public class EnrollmentsService {
     private final EnrollmentRepository enrollmentRepository;
 
     @Transactional
-    public void createEnrollment(Integer courseId, EnrollmentDTO enrollmentDTO) {
-        Course courseToUpdate = coursesService.getCourse(courseId);
+    public void createEnrollment(EnrollmentDTO enrollmentDTO) {
+        Course courseToUpdate = coursesService.getCourse(enrollmentDTO.getCourseDTO().getId());
         Enrollment enrollment = enrollmentMapper.toEntity(enrollmentDTO);
 
         enrollment.setCourse(courseToUpdate);
