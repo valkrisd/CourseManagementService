@@ -1,6 +1,7 @@
 package com.niiazov.coursemanagement.services;
 
 import com.niiazov.coursemanagement.dto.EnrollmentDTO;
+import com.niiazov.coursemanagement.exceptions.EntityRelationException;
 import com.niiazov.coursemanagement.exceptions.ResourceNotFoundException;
 import com.niiazov.coursemanagement.mappers.EnrollmentMapper;
 import com.niiazov.coursemanagement.models.Course;
@@ -61,13 +62,22 @@ public class EnrollmentsService {
 
             return enrollmentRepository.save(existingEnrollment);
         }).orElseThrow(() -> new ResourceNotFoundException("Enrollment with id " + enrollmentId + " does not exist"));
+
+        coursesService.updateCourse(enrollmentDTO.getCourseDTO().getId(), enrollmentDTO.getCourseDTO());
     }
 
     @Transactional
-    public void deleteEnrollment(Integer enrollmentId) {
+    public void deleteEnrollment(Integer enrollmentId, Integer userId) {
+
         Enrollment enrollmentToDelete = enrollmentRepository.findById(enrollmentId)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Enrollment with id " + enrollmentId + " does not exist"));
+
+        if (!enrollmentToDelete.getUserId().equals(userId)) {
+            throw new EntityRelationException
+                    ("Enrollment with id " + enrollmentId + " does not belong to user " + userId);
+        }
+
         enrollmentRepository.delete(enrollmentToDelete);
     }
 }

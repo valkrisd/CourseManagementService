@@ -76,11 +76,11 @@ public class EnrollmentsController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @DeleteMapping("/{enrollmentId}")
-    public ResponseEntity<HttpStatus> deleteEnrollment(@PathVariable Integer enrollmentId) {
-        log.info("Удаление записи с id: {}", enrollmentId);
-        enrollmentsService.deleteEnrollment(enrollmentId);
-        log.info("Запись с id: {} успешно удалена", enrollmentId);
+    @DeleteMapping("/{enrollmentId}/user/{userId}")
+    public ResponseEntity<HttpStatus> deleteEnrollment(@PathVariable Integer enrollmentId, @PathVariable Integer userId) {
+        log.info("Удаление записи на курс с id: {} для пользователя  с id: {}", enrollmentId, userId);
+        enrollmentsService.deleteEnrollment(enrollmentId, userId);
+        log.info("Запись на курс с id: {} для пользователя с id: {} успешно удалена", enrollmentId, userId);
 
         return ResponseEntity.ok(HttpStatus.OK);
     }
