@@ -1,7 +1,10 @@
 package com.niiazov.coursemanagement.dto;
 
-import com.niiazov.coursemanagement.enums.Status;
-import jakarta.validation.constraints.*;
+import com.niiazov.coursemanagement.enums.CourseStatus;
+import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -9,8 +12,11 @@ import java.time.LocalDate;
 
 @Data
 public class CourseDTO {
+    @Nullable
+    private Integer id;
+
     @Size(max = 255, message = "Title cannot be longer than 255 characters")
-    @NotNull
+    @NotEmpty(message = "Title cannot be empty")
     private String title;
 
     private String description;
@@ -20,7 +26,7 @@ public class CourseDTO {
 
     private Integer duration;
 
-    private Status status;
+    private CourseStatus courseStatus;
 
     @Digits(integer = 10, fraction = 2, message = "Price must be a number of up to 10 integer digits with 2 fractional digits")
     private BigDecimal price;

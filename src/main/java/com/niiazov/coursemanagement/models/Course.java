@@ -1,10 +1,13 @@
 package com.niiazov.coursemanagement.models;
 
-import com.niiazov.coursemanagement.enums.Status;
+import com.niiazov.coursemanagement.enums.CourseStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -17,6 +20,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 @Getter
 @Setter
+@EntityListeners(AuditingEntityListener.class)
 public class Course {
 
     @Id
@@ -24,7 +28,7 @@ public class Course {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "title", nullable = false)
+    @Column(name = "title")
     private String title;
 
     @Column(name = "description")
@@ -38,7 +42,7 @@ public class Course {
 
     @Column(name = "status", length = 20)
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private CourseStatus courseStatus;
 
     @Column(name = "price")
     private BigDecimal price;
@@ -50,17 +54,17 @@ public class Course {
     private LocalDate endDate;
 
     @Column(name = "created_at")
+    @CreatedDate
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
+    @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "course")
-    private Set<CourseMaterial> courseMaterials = new HashSet<>();
-
-    @OneToMany(mappedBy = "course")
+    @OneToMany(mappedBy = "course", cascade = {CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     private Set<Lesson> lessons = new HashSet<>();
 
-    @OneToMany(mappedBy = "course")
+    @OneToMany(mappedBy = "course", cascade = {CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     private Set<Enrollment> enrollments = new HashSet<>();
+
 }
