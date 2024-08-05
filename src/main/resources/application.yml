@@ -16,4 +16,4 @@ spring:
       hibernate:
         show_sql: true
         hbm2ddl:
-          auto: update
+          auto: none

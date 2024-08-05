@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.niiazov</groupId>
-	<artifactId>CourseManagement</artifactId>
+	<artifactId>course-management</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>CourseManagement</name>
 	<description>CourseManagement</description>
