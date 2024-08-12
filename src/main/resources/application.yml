@@ -1,11 +1,11 @@
-server:
-  address: 127.0.0.1
-  port: 8081
+#server:
+#  address: 127.0.0.1
+#  port: 8081
 
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/CourseDB
+    url: jdbc:postgresql://localhost:5433/CourseDB
     username: postgres
     password: 307t0HrY
   flyway:
