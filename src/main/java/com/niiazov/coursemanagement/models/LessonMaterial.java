@@ -24,7 +24,7 @@ public class LessonMaterial {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "type",length = 50)
+    @Column(name = "type", length = 50)
     @Enumerated(EnumType.STRING)
     private LessonMaterialType lessonMaterialType;
 

@@ -10,7 +10,7 @@ RUN adduser --system spring-boot && addgroup --system spring-boot && adduser spr
 USER spring-boot
 
 WORKDIR /app
-EXPOSE 8081
+EXPOSE 8080
 
 COPY --from=build /app/target/course-management-0.0.1-SNAPSHOT.jar /app/application.jar
 ENTRYPOINT ["java", "-jar", "/app/application.jar"]
