@@ -1,16 +1,12 @@
 package com.niiazov.coursemanagement.controllers;
 
 import com.niiazov.coursemanagement.dto.EnrollmentDTO;
-import com.niiazov.coursemanagement.exceptions.ResourceNotCreatedException;
-import com.niiazov.coursemanagement.exceptions.ResourceNotUpdatedException;
 import com.niiazov.coursemanagement.services.EnrollmentsService;
-import com.niiazov.coursemanagement.util.ErrorsUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
@@ -23,16 +19,9 @@ public class EnrollmentsController {
     private final EnrollmentsService enrollmentsService;
 
     @PostMapping
-    public ResponseEntity<HttpStatus> createEnrollment(@RequestBody @Valid EnrollmentDTO enrollmentDTO,
-                                                       BindingResult bindingResult) {
+    public ResponseEntity<HttpStatus> createEnrollment(@RequestBody @Valid EnrollmentDTO enrollmentDTO) {
 
         log.info("Попытка создания новой записи на курс: {}", enrollmentDTO);
-        if (bindingResult.hasErrors()) {
-            String errorMsg = ErrorsUtil.getErrorMessage(bindingResult);
-            log.error("Ошибка валидации при создании записи на курс: {}: {}", enrollmentDTO, errorMsg);
-            throw new ResourceNotCreatedException(errorMsg);
-        }
-
         enrollmentsService.createEnrollment(enrollmentDTO);
         log.info("Запись на курс успешно создана: {}", enrollmentDTO);
 
@@ -61,15 +50,8 @@ public class EnrollmentsController {
 
     @PutMapping("/{enrollmentId}")
     public ResponseEntity<HttpStatus> updateEnrollment(@PathVariable Integer enrollmentId,
-                                                       @RequestBody @Valid EnrollmentDTO enrollmentDTO,
-                                                       BindingResult bindingResult) {
+                                                       @RequestBody @Valid EnrollmentDTO enrollmentDTO) {
         log.info("Обновление данных о записи с id: {}", enrollmentId);
-        if (bindingResult.hasErrors()) {
-            String errorMsg = ErrorsUtil.getErrorMessage(bindingResult);
-            log.error("Ошибка валидации при обновлении записи с id: {}: {}", enrollmentId, errorMsg);
-            throw new ResourceNotUpdatedException(errorMsg);
-        }
-
         enrollmentsService.updateEnrollment(enrollmentId, enrollmentDTO);
         log.info("Данные о записи с id: {} успешно обновлены", enrollmentId);
 

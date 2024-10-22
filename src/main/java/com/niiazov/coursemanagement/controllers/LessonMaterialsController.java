@@ -1,16 +1,12 @@
 package com.niiazov.coursemanagement.controllers;
 
 import com.niiazov.coursemanagement.dto.LessonMaterialDTO;
-import com.niiazov.coursemanagement.exceptions.ResourceNotCreatedException;
-import com.niiazov.coursemanagement.exceptions.ResourceNotUpdatedException;
 import com.niiazov.coursemanagement.services.LessonMaterialsService;
-import com.niiazov.coursemanagement.util.ErrorsUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
@@ -26,16 +22,9 @@ public class LessonMaterialsController {
     @PostMapping("/{courseId}/lessons/{lessonId}/materials")
     public ResponseEntity<HttpStatus> addLessonMaterial(@PathVariable Integer lessonId,
                                                         @PathVariable Integer courseId,
-                                                        @Valid @RequestBody LessonMaterialDTO lessonMaterialDTO,
-                                                        BindingResult bindingResult) {
+                                                        @Valid @RequestBody LessonMaterialDTO lessonMaterialDTO) {
 
         log.info("Попытка добавления нового материала к уроку с id: {}", lessonId);
-        if (bindingResult.hasErrors()) {
-            String errorMsg = ErrorsUtil.getErrorMessage(bindingResult);
-            log.error("Ошибка валидации при добавлении материала к уроку с id: {}: {}", lessonId, errorMsg);
-            throw new ResourceNotCreatedException(errorMsg);
-        }
-
         lessonMaterialsService.addLessonMaterial(courseId, lessonId, lessonMaterialDTO);
         log.info("Новый материал к уроку с id: {} успешно добавлен", lessonId);
 
@@ -70,13 +59,7 @@ public class LessonMaterialsController {
     public ResponseEntity<HttpStatus> updateLessonMaterial(@PathVariable Integer lessonId,
                                                            @PathVariable Integer courseId,
                                                            @PathVariable Integer lessonMaterialId,
-                                                           @Valid @RequestBody LessonMaterialDTO lessonMaterialDTO,
-                                                           BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            String errorMsg = ErrorsUtil.getErrorMessage(bindingResult);
-            log.error("Ошибка валидации при обновлении материала к уроку с id: {}: {}", lessonId, errorMsg);
-            throw new ResourceNotUpdatedException(errorMsg);
-        }
+                                                           @Valid @RequestBody LessonMaterialDTO lessonMaterialDTO) {
 
         log.info("Попытка обновления материала к уроку с id: {}", lessonId);
         lessonMaterialsService.updateLessonMaterial(lessonId, courseId, lessonMaterialId, lessonMaterialDTO);

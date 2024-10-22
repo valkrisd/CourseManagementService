@@ -2,9 +2,7 @@ package com.niiazov.coursemanagement.models;
 
 import com.niiazov.coursemanagement.enums.LessonMaterialType;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -13,7 +11,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "lesson_material")
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @EntityListeners(AuditingEntityListener.class)
