@@ -28,7 +28,7 @@ public class LessonsService {
     private final CoursesService coursesService;
 
     @Transactional
-    @CachePut(value = "lessons", key = "#result.id")
+    @CachePut(value = "lessons", cacheManager = "concurrentMapCacheManager", key = "#result.id")
     public Lesson createLesson(LessonDTO lessonDTO,
                                Integer courseId) {
 
@@ -42,7 +42,7 @@ public class LessonsService {
         return lessonRepository.save(lesson);
     }
 
-    @Cacheable(value = "lessons", unless = "#result.isEmpty()")
+    @Cacheable(value = "lessons", cacheManager = "concurrentMapCacheManager", unless = "#result.isEmpty()")
     public Set<LessonDTO> getAllLessons(Integer courseId) {
 
         Course course = coursesService.getCourse(courseId);
@@ -67,7 +67,7 @@ public class LessonsService {
         return lessonMapper.toDTO(lesson);
     }
 
-    @Cacheable(value = "lessons", key = "#lessonId")
+    @Cacheable(value = "lessons", cacheManager = "concurrentMapCacheManager", key = "#lessonId")
     public Lesson getLesson(Integer courseId,
                             Integer lessonId) {
 
@@ -85,7 +85,7 @@ public class LessonsService {
     }
 
     @Transactional
-    @CachePut(value = "lessons", key = "#lessonId")
+    @CachePut(value = "lessons", cacheManager = "concurrentMapCacheManager", key = "#lessonId")
     public void updateLesson(Integer courseId,
                              Integer lessonId,
                              LessonDTO lessonDTO) {
@@ -101,8 +101,8 @@ public class LessonsService {
 
     }
 
-    @CacheEvict(value = "lessons", key = "#lessonId")
     @Transactional
+    @CacheEvict(value = "lessons", cacheManager = "concurrentMapCacheManager", key = "#lessonId")
     public void deleteLesson(Integer courseId,
                              Integer lessonId) {
 

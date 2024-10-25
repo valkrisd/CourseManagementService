@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Set;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -29,9 +29,10 @@ public class CoursesController {
     }
 
     @GetMapping
-    public ResponseEntity<Set<CourseDTO>> getCourses() {
+    public ResponseEntity<List<CourseDTO>> getCourses() {
+
         log.info("Запрос списка всех курсов");
-        Set<CourseDTO> courseDTOs = coursesService.getAllCourses();
+        List<CourseDTO> courseDTOs = coursesService.getAllCourses();
         log.debug("Список всех курсов успешно получен: {}", courseDTOs);
 
         return ResponseEntity.ok(courseDTOs);
