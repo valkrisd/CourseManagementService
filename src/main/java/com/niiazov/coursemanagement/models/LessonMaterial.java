@@ -2,8 +2,9 @@ package com.niiazov.coursemanagement.models;
 
 import com.niiazov.coursemanagement.enums.LessonMaterialType;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -13,7 +14,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "lesson_material")
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @EntityListeners(AuditingEntityListener.class)
@@ -24,7 +26,7 @@ public class LessonMaterial {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "type",length = 50)
+    @Column(name = "type", length = 50)
     @Enumerated(EnumType.STRING)
     private LessonMaterialType lessonMaterialType;
 

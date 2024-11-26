@@ -8,6 +8,9 @@ import com.niiazov.coursemanagement.models.Course;
 import com.niiazov.coursemanagement.models.Lesson;
 import com.niiazov.coursemanagement.repositories.LessonRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,8 +28,9 @@ public class LessonsService {
     private final CoursesService coursesService;
 
     @Transactional
-    public void createLesson(LessonDTO lessonDTO,
-                             Integer courseId) {
+    @CachePut(value = "lessons", cacheManager = "concurrentMapCacheManager", key = "#result.id")
+    public Lesson createLesson(LessonDTO lessonDTO,
+                               Integer courseId) {
 
         Course courseToUpdate = coursesService.getCourse(courseId);
         Lesson lesson = lessonMapper.toEntity(lessonDTO);
@@ -35,9 +39,10 @@ public class LessonsService {
         courseToUpdate.getLessons().add(lesson);
         courseToUpdate.setUpdatedAt(LocalDateTime.now());
 
-        lessonRepository.save(lesson);
+        return lessonRepository.save(lesson);
     }
 
+    @Cacheable(value = "lessons", cacheManager = "concurrentMapCacheManager", unless = "#result.isEmpty()")
     public Set<LessonDTO> getAllLessons(Integer courseId) {
 
         Course course = coursesService.getCourse(courseId);
@@ -62,6 +67,7 @@ public class LessonsService {
         return lessonMapper.toDTO(lesson);
     }
 
+    @Cacheable(value = "lessons", cacheManager = "concurrentMapCacheManager", key = "#lessonId")
     public Lesson getLesson(Integer courseId,
                             Integer lessonId) {
 
@@ -79,6 +85,7 @@ public class LessonsService {
     }
 
     @Transactional
+    @CachePut(value = "lessons", cacheManager = "concurrentMapCacheManager", key = "#lessonId")
     public void updateLesson(Integer courseId,
                              Integer lessonId,
                              LessonDTO lessonDTO) {
@@ -91,9 +98,11 @@ public class LessonsService {
         lesson.setUpdatedAt(LocalDateTime.now());
 
         lessonRepository.save(lesson);
+
     }
 
     @Transactional
+    @CacheEvict(value = "lessons", cacheManager = "concurrentMapCacheManager", key = "#lessonId")
     public void deleteLesson(Integer courseId,
                              Integer lessonId) {
 

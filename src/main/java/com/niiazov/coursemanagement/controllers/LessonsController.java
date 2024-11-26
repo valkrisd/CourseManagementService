@@ -1,16 +1,12 @@
 package com.niiazov.coursemanagement.controllers;
 
 import com.niiazov.coursemanagement.dto.LessonDTO;
-import com.niiazov.coursemanagement.exceptions.ResourceNotCreatedException;
-import com.niiazov.coursemanagement.exceptions.ResourceNotUpdatedException;
 import com.niiazov.coursemanagement.services.LessonsService;
-import com.niiazov.coursemanagement.util.ErrorsUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
@@ -25,16 +21,9 @@ public class LessonsController {
 
     @PostMapping("/{courseId}/lessons")
     public ResponseEntity<HttpStatus> createLesson(@PathVariable Integer courseId,
-                                                   @RequestBody @Valid LessonDTO lessonDTO,
-                                                   BindingResult bindingResult) {
+                                                   @RequestBody @Valid LessonDTO lessonDTO) {
 
         log.info("Попытка создания нового урока в курсе с id: {}", courseId);
-        if (bindingResult.hasErrors()) {
-            String errorMsg = ErrorsUtil.getErrorMessage(bindingResult);
-            log.error("Ошибка валидации при создании урока: {}", errorMsg);
-            throw new ResourceNotCreatedException(errorMsg);
-        }
-
         lessonsService.createLesson(lessonDTO, courseId);
         log.info("Урок в курсе с id: {} успешно создан: {}", courseId, lessonDTO);
 
@@ -54,6 +43,7 @@ public class LessonsController {
     @GetMapping("/{courseId}/lessons/{lessonId}")
     public ResponseEntity<LessonDTO> getLesson(@PathVariable Integer courseId,
                                                @PathVariable Integer lessonId) {
+
         log.info("Запрос данных о уроке с id: {} в курсе с id: {}", lessonId, courseId);
         LessonDTO lessonDTO = lessonsService.getLessonDTO(courseId, lessonId);
         log.info("Урок с id: {} в курсе с id: {} успешно найден", lessonId, courseId);
@@ -64,15 +54,9 @@ public class LessonsController {
     @PutMapping("/{courseId}/lessons/{lessonId}")
     public ResponseEntity<HttpStatus> updateLesson(@PathVariable Integer courseId,
                                                    @PathVariable Integer lessonId,
-                                                   @RequestBody @Valid LessonDTO lessonDTO,
-                                                   BindingResult bindingResult) {
-        log.info("Обновление данных об уроке с id: {} в курсе с id: {}", lessonId, courseId);
-        if (bindingResult.hasErrors()) {
-            String errorMsg = ErrorsUtil.getErrorMessage(bindingResult);
-            log.error("Ошибка валидации при обновлении урока с id: {}: {}", lessonId, errorMsg);
-            throw new ResourceNotUpdatedException(errorMsg);
-        }
+                                                   @RequestBody @Valid LessonDTO lessonDTO) {
 
+        log.info("Обновление данных об уроке с id: {} в курсе с id: {}", lessonId, courseId);
         lessonsService.updateLesson(courseId, lessonId, lessonDTO);
         log.info("Данные урока с id: {} в курсе с id: {} успешно обновлены", lessonId, courseId);
 
@@ -82,6 +66,7 @@ public class LessonsController {
     @DeleteMapping("/{courseId}/lessons/{lessonId}")
     public ResponseEntity<HttpStatus> deleteLesson(@PathVariable Integer courseId,
                                                    @PathVariable Integer lessonId) {
+
         log.info("Удаление урока с id: {} в курсе с id: {}", lessonId, courseId);
         lessonsService.deleteLesson(courseId, lessonId);
         log.info("Урок с id: {} в курсе с id: {} успешно удален", lessonId, courseId);
